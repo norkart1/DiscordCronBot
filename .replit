@@ -1,0 +1,95 @@
+modules = ["nodejs-20"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "DiscordBot"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "discord_bot_setup"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "KeepAliveServer"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "DevBot"
+
+[[workflows.workflow]]
+name = "DiscordBot"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm install && node index.js"
+waitForPort = 8000
+
+[[workflows.workflow]]
+name = "discord_bot_setup"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = """
+npm init -y && npm install discord.js express winston node-cron dotenv && node -e \"console.log('Dependencies installed successfully. Here are the key features implemented:')\" && echo -e \"
+- Discord.js integration with ready event, commands handler\" && echo \"- Express server for keep-alive functionality (port 8000)\" && echo \"- Cron job scheduled every 5 minutes to prevent hosting sleep\" && echo \"- Custom bot activity status (PLAYING, STREAMING, etc.)\" && echo \"- Winston logger with multiple transports\" && echo \"- Command system with ping, help, and status commands\""""
+
+[[workflows.workflow]]
+name = "KeepAliveServer"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node server.js"
+waitForPort = 8000
+
+[[workflows.workflow]]
+name = "DevBot"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npx nodemon index.js"
+
+[deployment]
+run = ["sh", "-c", "npm install && node index.js"]
+
+[[ports]]
+localPort = 8000
+externalPort = 80

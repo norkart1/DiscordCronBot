@@ -1,0 +1,21 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.18.0",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "node-cron": "^3.0.3",
+    "nodemon": "^3.1.9",
+    "winston": "^3.17.0"
+  },
+  "description": "A Discord bot built with Node.js that includes cron jobs to prevent Render hosting from sleeping and customizable bot activity status."
+}
